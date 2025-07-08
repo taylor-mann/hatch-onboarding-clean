@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String   @unique
+  role      String
+  createdAt DateTime @default(now())
+}
+
+model Entity {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String
+  description String?
+  confirmed   Boolean  @default(false)
+  primaryInsights     ComparativeInsight[] @relation("primaryEntity")
+  competitorInsights  ComparativeInsight[] @relation("competitorEntity")
+}
+
+model ComparativeInsight {
+  id                Int      @id @default(autoincrement())
+  title             String
+  description       String
+  primaryEntity     Entity   @relation("primaryEntity", fields: [primaryEntityId], references: [id])
+  primaryEntityId   Int
+  competitorEntity  Entity   @relation("competitorEntity", fields: [competitorEntityId], references: [id])
+  competitorEntityId Int
+  createdAt         DateTime @default(now())
+}
+
+model Mission {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  integration String?
+  assigned    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+} 
