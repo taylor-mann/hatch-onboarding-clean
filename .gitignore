@@ -31,3 +31,5 @@
 
 # Large binary files
 *.node
+
+*.claude
